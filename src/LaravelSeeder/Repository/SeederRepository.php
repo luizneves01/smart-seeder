@@ -233,7 +233,7 @@ class SeederRepository implements SeederRepositoryInterface
     {
         return $this->table()->get()->toArray();
     }
-
+    
     /**
      * Get the completed migrations with their batch numbers.
      *
@@ -242,18 +242,17 @@ class SeederRepository implements SeederRepositoryInterface
     public function getMigrationBatches()
     {
         return $this->table()
-            ->orderBy('batch', 'asc')
-            ->orderBy('migration', 'asc')
-            ->pluck('batch', 'migration')->all();
+                ->orderBy('batch', 'asc')
+                ->orderBy('migration', 'asc')
+                ->pluck('batch', 'migration')->all();
     }
-
+    
     /**
      * Delete the migration repository data store.
      *
      * @return void
      */
-    public function deleteRepository()
-    {
+    public function deleteRepository() {
         //   
     }
 }

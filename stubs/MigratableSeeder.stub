@@ -3,14 +3,12 @@
 use Eighty8\LaravelSeeder\Migration\MigratableSeeder;
 use Eighty8\LaravelSeeder\Repository\DisableForeignKeysTrait;
 
-return new class extends MigratableSeeder
+class {{class}} extends MigratableSeeder
 {
     use DisableForeignKeysTrait;
 
     /**
-     * Run the seeders.
-     *
-     * @return void
+     * Run the database seeder.
      */
     public function run(): void
     {
@@ -18,12 +16,10 @@ return new class extends MigratableSeeder
     }
 
     /**
-     * Reverse the seeder.
-     *
-     * @return void
+     * Reverts the database seeder.
      */
     public function down(): void
     {
         // Remove your data
     }
-};
+}

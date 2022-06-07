@@ -12,3 +12,5 @@ vendor/
 
 # Debug
 coverage/
+
+.Identifier

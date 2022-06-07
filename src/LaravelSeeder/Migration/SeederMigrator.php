@@ -7,7 +7,6 @@ use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
-use ReflectionClass;
 
 class SeederMigrator extends Migrator implements SeederMigratorInterface
 {
@@ -100,12 +99,12 @@ class SeederMigrator extends Migrator implements SeederMigratorInterface
      */
     protected function runUp($file, $batch, $pretend): void
     {
-        // First we will resolve a "real" instance of the migration class from this
-        // migration file name. Once we have the instances we can run the actual
+        // First we will resolve a "real" instance of the seeder class from this
+        // seeder file name. Once we have the instances we can run the actual
         // command such as "up" or "down", or we can just simulate the action.
-        $seeder = $this->resolvePath($file);
-
-        $name = $this->getMigrationName($file);
+        $seeder = $this->resolve(
+            $name = $this->getMigrationName($file)
+        );
 
         $this->note("<comment>Seeding:</comment> {$name}");
 
@@ -126,14 +125,15 @@ class SeederMigrator extends Migrator implements SeederMigratorInterface
     }
 
     /**
-     * Resolve a migration instance from a migration path.
+     * Resolve a migration instance from a file.
      *
-     * @param  string  $path
+     * @param string $file
+     *
      * @return MigratableSeeder
      */
-    protected function resolvePath(string $path): MigratableSeeder
+    public function resolve($file): MigratableSeeder
     {
-        return parent::resolvePath($path);
+        return parent::resolve($file);
     }
 
     /**
@@ -155,9 +155,7 @@ class SeederMigrator extends Migrator implements SeederMigratorInterface
         })->all();
 
         return $this->rollbackMigrations(
-            $migrations,
-            $paths,
-            compact('pretend')
+            $migrations, $paths, compact('pretend')
         );
     }
 
@@ -186,8 +184,7 @@ class SeederMigrator extends Migrator implements SeederMigratorInterface
 
             $this->runDown(
                 $files[$migration->seed],
-                $migration,
-                Arr::get($options, 'pretend', false)
+                $migration, Arr::get($options, 'pretend', false)
             );
         }
 
@@ -208,9 +205,9 @@ class SeederMigrator extends Migrator implements SeederMigratorInterface
         // First we will get the file name of the seeder so we can resolve out an
         // instance of the seeder. Once we get an instance we can either run a
         // pretend execution of the seeder or we can run the real seeder.
-        $seeder = $this->resolvePath($file);
-
-        $name = $this->getMigrationName($file);
+        $seeder = $this->resolve(
+            $name = $this->getMigrationName($file)
+        );
 
         $this->note("<comment>Rolling back:</comment> {$name}");
 
